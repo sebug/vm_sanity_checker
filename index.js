@@ -3,8 +3,9 @@
     'use strict';
 
     var walk = require('walk');
-
+    var fs = require('fs');
     var args = process.argv.slice(2);
+    var acorn = require('acorn');
 
     if (args.length === 0) {
 	console.log('Usage: node index.js directory');
@@ -16,8 +17,16 @@
 
     walker.on('file', function (root, fileStats, next) {
 	if (fileStats.name && fileStats.name.indexOf('.js') === fileStats.name.length - 3) {
-	    console.log(fileStats.name);
+	    fs.readFile(root + '/' + fileStats.name, 'utf8', function (err, data) {
+		if (err) {
+		    throw err;
+		}
+		var tree = acorn.parse(data);
+		console.log(tree);
+		next();
+	    });
+	} else {
+	    next();
 	}
-	next();
     });
 }());
