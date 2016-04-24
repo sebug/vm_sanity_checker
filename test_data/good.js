@@ -1,6 +1,7 @@
 /*global define*/
 define(['model/M', 'knockout'], function (M, ko) {
     'use strict';
+    var someVar = 42;
 
     function GoodViewModel(initialData, getData, context) {
 	var self = this;
